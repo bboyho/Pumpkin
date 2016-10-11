@@ -48,7 +48,7 @@ void loop() {
     current_button1State = true; // button has been pressed once
 
       if(prev_button1State != current_button1State){//check to see if button is still being pressed
-      ledMode = ledMode++;//change MODE after button has been pressed
+      ledMode = ledMode+1;//change MODE after button has been pressed
       // button is pressed, change LED color/sequence
       if(ledMode<0 || ledMode>6){
         //reset ledMode
