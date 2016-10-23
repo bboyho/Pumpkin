@@ -18,6 +18,9 @@ boolean increasing = true;
 
 int blinkVal = 0;
 boolean on = false;
+int counter = 0;
+int blinkPress = 0;
+int blinkRate = 750;
 
 const int button1Pin = 2;
 boolean prev_button1State = false;
@@ -86,6 +89,25 @@ void loop() {
         //reset pattern
         pattern = 0;
       }
+
+      /*if(pattern == 3){
+       blinkPress = blinkPress+1;
+       if(blinkPress<0 || blinkPress>2){
+       blinkPress=0; 
+       }
+       switch(blinkPress){
+       case 1:
+       blinkRate=250;
+       break;
+       case 2:
+       blinkRate=500;
+       break;
+       default:
+       blinkRate=750;
+       break;
+       }
+       }*/
+
     }
     else{//do nothing because finger is still on button
     }
@@ -241,7 +263,7 @@ void patternON(){
     allOFF();
     break;
   }//end switch
-  Serial.print(ledMode);//print what the mode is set to
+  //Serial.print(ledMode);//print what the mode is set to
 }
 
 /*
@@ -329,33 +351,34 @@ void patternFade(){
 }
 
 void patternBlink(){
+
   switch(ledMode){
-  case 1://BLINK RED
+  case 1://RED
     analogWrite(ledG, 0);
     analogWrite(ledB, 0);
     analogWrite(ledR, blinkVal);
     break;
-  case 2://FADE YELLOW
+  case 2://YELLOW
     analogWrite(ledR, blinkVal);
     analogWrite(ledG, blinkVal);
     analogWrite(ledB, 0);
     break;
-  case 3://FADE GREEN
+  case 3://GREEN
     analogWrite(ledR, 0);
     analogWrite(ledG, blinkVal);
     analogWrite(ledB, 0);
     break;
-  case 4://FADE CLEAR BLUE
+  case 4://CLEAR BLUE
     analogWrite(ledR, 0);
     analogWrite(ledG, blinkVal);
     analogWrite(ledB, blinkVal);
     break;
-    case 5://FADE BLUE
+  case 5://BLUE
     analogWrite(ledR, 0);
     analogWrite(ledG, 0);
     analogWrite(ledB, blinkVal);
     break;
-  case 6://FADE MAGENTA
+  case 6://MAGENTA
     analogWrite(ledR, blinkVal);
     analogWrite(ledG, 0);
     analogWrite(ledB, blinkVal);
@@ -364,14 +387,20 @@ void patternBlink(){
     allOFF();
     break;
   }
-  delay(250);
+  if(counter == 500){
+    if(on == true){
+      blinkVal = 0;
+      on = false;
+    }
+    else{//it was on, so turn off
+      blinkVal = 255;
+      on = true;
+    }
+    counter = 0;
+  }
+  else{
+    counter = counter +1;
+  }
 
-  if(on == true){
-    blinkVal = 0;
-    on = false;
-  }
-  else{//it was on, so turn off
-    blinkVal = 255;
-    on = true;
-  }
 }
+
